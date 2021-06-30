@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spongemock Text Generator</title>
+</head>
+<body>
+	<img src="./mocking.jpeg" alt="Spongemock">
+    <h1>Welcome to Spongemock!</h1>
+    <p>hOPeFuLLy yOu DoN't mESs iT uP</p><br>
+
+    <p>Click the button to change the font: sPoNgEmOckK or S P A C E</p>
+    <input type="button" id="font" value="sPoNgEmOck" onclick="javascript:toggle(this);">
+
+    <p>
+    <label for="Text">Input Text:</label><br>
+    <textarea id="inputText" cols="40" rows="5" oninput="updateText()"></textarea>
+    </p>
+
+    <a id="clear" onclick="eraseText();return false;">Clear text</a>
+
+    <p>
+    <textarea id="outputText" cols="40" rows="5" readonly="true"></textarea>
+    </p>
+
+    <a id="copy" onclick="copyToClipboard();return false;">Copy Text</a>
+
+	<footer>
+		<p>Made by Conner Contreras and Bradley Gallon</p>
+		<address>
+			<p>Contact <a href="mailto:cjcontreras99@gmail.com">cjcontreras99@gmail.com</a> for questions, concerns, or help.</p>
+		</address>
+	</footer>
+
+	<script>
+	function copyToClipboard() {
+	  /* Get the text field */
+	  var copyText = document.getElementById("outputText");
+	
+	  /* Select the text field */
+	  copyText.select();
+	  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+	
+	  /* Copy the text inside the text field */
+	  document.execCommand("copy");
+	}
+
+	function eraseText() {
+    document.getElementById("inputText").value = null;
+	}
+
+	</script>
+
+    <style type="text/css">
+    	body{
+    		text-align: center;
+    		background-color: rgb(36, 36, 36);
+    		color: rgb(191, 191, 191);
+    		font-size: 22px;
+    	}
+    	textarea{
+    		background-color: rgb(36, 36, 36);
+    		color: rgb(191, 191, 191);
+    		font-size: 22px;
+    	}
+    	a#copy{
+    		padding: 10px;
+    		border: 1px solid black;
+    		border-radius: 8px;
+    		background-color: rgb(220,220,220);
+    		color: black;
+    		cursor: pointer;
+    	}
+    	a#clear{
+    		padding: 10px;
+    		border: 1px solid black;
+    		border-radius: 8px;
+    		background-color: rgb(220,220,220);
+    		color: black;
+    		cursor: pointer;
+    	}
+        input{
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 8px;
+            background-color: rgb(220,220,220);
+            color: black;
+            cursor: pointer;
+        }
+
+    	#outputText{
+    		cursor: default;
+    	}
+    	footer {
+            margin-top: 100px;
+            padding: 20px;
+            text-align: center;
+        	font-size: 16px;
+        }
+    </style>
+    
+<script type="text/javascript">
+function updateText() {
+	const inputString = document.getElementById("inputText").value;
+    const font = document.getElementById("font").value;
+
+    let output = "";
+
+    if(font == "sPoNgEmOck") {
+        let prev1 = null;
+        let prev2 = null;
+
+        for(let char of inputString){
+            if(char.match(/[a-zA-Z]/i)){
+                char = choose_case(char, prev1, prev2);
+                prev2 = prev1;
+                prev1 = char;
+                output += char;
+            }    
+            else{
+                //then this is a non alphabetical char
+                output += char;
+            }        
+        }
+    }
+    if(font == "S P A C E")
+    {
+        for(let char of inputString){
+            if(char.match(" ")){
+                output += char;
+            }
+            else{
+                output += char;
+                output += " ";
+            }
+        }
+    }
+
+   
+	document.getElementById("outputText").innerText = output;
+}
+
+
+function choose_case(char, prev1, prev2) {
+
+    // generate random number between [0.0, 1.0]
+    num = Math.random();
+    const isUpper = char.match(/[A-Z]/g);
+    const prev1Upper = prev1 && prev1.match(/[A-Z]/g);
+    const prev2Upper = prev2 && prev2.match(/[A-Z]/g);
+	const upper = char.toUpperCase();
+	const lower = char.toLowerCase();
+	let c = true;
+
+    // determining the casing of the char, @var case is true if its uppercase
+    if(isUpper)
+        c = true;
+    else
+        c = false;
+    
+    if(!prev1 || !prev2) {
+        // first or second charcter in the string
+        if(num > .5)
+            return upper;
+        else
+            return lower;
+    }
+    else if((c && prev1Upper) || ((!c) && !prev1Upper))
+        if((c && prev2Upper) || ((!c) && !prev2Upper))
+            if(num >= .98)
+                if(c)
+                    return upper;
+                else
+                    return lower;
+            else
+                if(c)
+                    return lower;
+                else
+                    return upper;
+        else
+            if(num >= .85)
+                if(c)
+                    return lower;
+                else
+                    return upper;
+            else
+                if(c)
+                    return lower;
+                else
+                    return upper;
+    else 
+        if(num >= .85)
+            if(c)
+                return lower;
+            else
+                return upper;
+        else
+            if(c)
+                return upper;
+            else
+                return lower;
+}
+
+function toggle(button) {
+    switch (button.value) {
+        case "sPoNgEmOck":
+            button.value = "S P A C E";
+            break;
+        case "S P A C E":
+            button.value = "sPoNgEmOck";
+            break;
+    }
+}
+
+</script>
+
+</body>
+</html>
+
